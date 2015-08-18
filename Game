@@ -1,0 +1,217 @@
+package game;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.swing.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.*;
+
+public class Game extends KeyAdapter implements ActionListener{
+	private Component component;
+	private int deltaX;
+	private int deltaY;
+	Clip clip;
+
+	public Game(Component component, int deltaX, int deltaY){
+		this.component = component;
+		this.deltaX = deltaX;
+		this.deltaY = deltaY;
+
+	}
+
+	public Game(){//FIXME USE KEY BINDINGS, NOT KEYLISTENER
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		try{
+			clip = AudioSystem.getClip();
+			File file = new File("C:/Users/Patrick/Desktop/pics/background_music.wav");
+			AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
+			clip.open(inputStream);
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
+
+			JFrame frame = new JFrame("Stuff");
+			frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+
+			JLabel character = new JLabel();
+			character.setIcon(new ImageIcon("C:/Users/Patrick/Desktop/pics/SMALLbird2.jpg"));
+			character.setSize(character.getPreferredSize());
+			character.setLocation(265, 274);
+			addMotionSupport(character);
+			JLabel background = new JLabel();
+			background.setIcon(new ImageIcon("C:/Users/Patrick/Desktop/pics/smallbackground.jpg"));
+			background.setSize(background.getPreferredSize());
+			background.add(character);
+			//character.setLocation(200, 200);
+			frame.add(background);
+
+			//options for in-game menu
+			JMenuBar menu = new JMenuBar();
+			JMenu stuff = new JMenu("More");
+			JMenuItem song = new JMenuItem("Song");
+			song.addActionListener(this);
+			stuff.add(song);
+			JMenuItem kill = new JMenuItem("Mute Music");
+			kill.addActionListener(this);
+			stuff.add(kill);
+			JMenuItem revive = new JMenuItem("Unmute Music");
+			revive.addActionListener(this);
+			stuff.add(revive);
+			menu.add(stuff);
+			//end options for in-game menu
+
+			frame.setJMenuBar(menu);
+			frame.pack();
+			frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+			frame.setVisible(true);	
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	//  Move the component to its new location. The component will stop
+	//  moving when it reaches the bounds of its container
+
+	public void move(int deltaX, int deltaY){
+		int componentWidth = component.getSize().width;
+		int componentHeight = component.getSize().height;
+
+		Dimension parentSize = component.getParent().getSize();
+		int parentWidth  = parentSize.width;
+		int parentHeight = parentSize.height;
+
+		//  Determine next X position
+
+		int nextX = Math.max(component.getLocation().x + deltaX, 0); //get location from top Left corner: 
+
+		if ( nextX + componentWidth > parentWidth){//if nextX (top left corner) + width of object > frame width
+			nextX = parentWidth - componentWidth;//dont let it pass border.
+		}
+
+		//  Determine next Y position
+
+		int nextY = Math.max(component.getLocation().y + deltaY, 0);
+
+		if ( nextY + componentHeight > 200){
+			nextY = parentHeight - componentHeight;
+		}
+
+		//  Move the component
+
+		component.setLocation(nextX, nextY);
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e){
+		if (e.getKeyCode() == KeyEvent.VK_LEFT)
+			move(-(deltaX+10), 0);
+		else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+			move(deltaX+10, 0);
+		else if (e.getKeyCode() == KeyEvent.VK_UP)
+			move(0, -(deltaY+10));
+		else if (e.getKeyCode() == KeyEvent.VK_DOWN)
+			move(0, deltaY+10);
+	}
+
+	private static JButton addMotionSupport(Component component){
+		KeyListener keyListener = new Game(component, 3, 3);
+		component.addKeyListener(keyListener);
+		component.setFocusable(true);
+
+		return new JButton("BUTTON");
+	}
+
+	public static void main(String[] args) throws Exception{
+		new Game();
+		/*EventQueue.invokeLater(new Runnable(){
+
+			public void run(){
+				Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+				try{
+					Clip clip = AudioSystem.getClip();
+					File file = new File("C:/Users/Patrick/Desktop/pics/background_music.wav");
+					AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
+					clip.open(inputStream);
+					clip.loop(Clip.LOOP_CONTINUOUSLY);
+
+					JFrame frame = new JFrame("Stuff");
+					frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+
+					JLabel character = new JLabel();
+					character.setIcon(new ImageIcon("C:/Users/Patrick/Desktop/pics/SMALLbird2.jpg"));
+					character.setSize(character.getPreferredSize());
+
+					JButton left = addMotionSupport(character);
+					JLabel background = new JLabel();
+					background.setIcon(new ImageIcon("C:/Users/Patrick/Desktop/pics/smallbackground.jpg"));
+					background.setSize(background.getPreferredSize());
+					background.add(character);
+					frame.add(background);
+
+					//options for in-game menu
+					JMenuBar menu = new JMenuBar();
+					JMenu stuff = new JMenu("More");
+					JMenuItem song = new JMenuItem("Song");
+
+					menu.add(stuff);
+					//end options for in-game menu
+
+					frame.setJMenuBar(menu);
+					frame.pack();
+					frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+					frame.setVisible(true);	
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		});*/
+	}
+
+	/**
+	 * Auxiliary method used to open webpages to specific 
+	 * pages.
+	 * @param str
+	 */
+	private void openPageInDefaultBrowser(String str){
+		try {
+			//Set your page url in this string. For eg, I m using URL for Google Search engine
+			String url = str;
+			java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+		}
+		catch (java.io.IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		String str = arg0.getActionCommand();
+		if (str.equals("Song")){
+			openPageInDefaultBrowser("https://www.youtube.com/watch?v=iW_Ct49H1ng");
+		}
+		else if(str.equals("Mute Music")){
+			clip.close();
+		}
+		else if(str.equals("Unmute Music")){
+			try{
+				clip = AudioSystem.getClip();
+				File file = new File("C:/Users/Patrick/Desktop/pics/background_music.wav");
+				AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
+				clip.open(inputStream);
+				clip.loop(Clip.LOOP_CONTINUOUSLY);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		//end case:
+		else{
+			System.out.println(str);
+		}
+
+	}
+}
