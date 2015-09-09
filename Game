@@ -30,22 +30,23 @@ public class Game extends KeyAdapter implements ActionListener{
 	public Game(){//FIXME USE KEY BINDINGS, NOT KEYLISTENER
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		try{
-			clip = AudioSystem.getClip();
+			//FIXME uncomment when audio
+			/*clip = AudioSystem.getClip();
 			File file = new File("C:/Users/Patrick/Desktop/pics/background_music.wav");
 			AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
 			clip.open(inputStream);
-			clip.loop(Clip.LOOP_CONTINUOUSLY);
+			clip.loop(Clip.LOOP_CONTINUOUSLY);*/
 
 			JFrame frame = new JFrame("Stuff");
 			frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 
 			JLabel character = new JLabel();
-			character.setIcon(new ImageIcon("C:/Users/Patrick/Desktop/pics/SMALLbird2.jpg"));
+			character.setIcon(new ImageIcon("C:/Users/Cory/Desktop/pics/SMALLbird2.jpg"));
 			character.setSize(character.getPreferredSize());
 			character.setLocation(265, 274);
 			addMotionSupport(character);
 			JLabel background = new JLabel();
-			background.setIcon(new ImageIcon("C:/Users/Patrick/Desktop/pics/smallbackground.jpg"));
+			background.setIcon(new ImageIcon("C:/Users/Cory/Desktop/pics/smallbackground.jpg"));
 			background.setSize(background.getPreferredSize());
 			background.add(character);
 			//character.setLocation(200, 200);
@@ -125,53 +126,9 @@ public class Game extends KeyAdapter implements ActionListener{
 
 		return new JButton("BUTTON");
 	}
-
-	public static void main(String[] args) throws Exception{
+	public static void main(String[] args){
 		new Game();
-		/*EventQueue.invokeLater(new Runnable(){
-
-			public void run(){
-				Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-				try{
-					Clip clip = AudioSystem.getClip();
-					File file = new File("C:/Users/Patrick/Desktop/pics/background_music.wav");
-					AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
-					clip.open(inputStream);
-					clip.loop(Clip.LOOP_CONTINUOUSLY);
-
-					JFrame frame = new JFrame("Stuff");
-					frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-
-					JLabel character = new JLabel();
-					character.setIcon(new ImageIcon("C:/Users/Patrick/Desktop/pics/SMALLbird2.jpg"));
-					character.setSize(character.getPreferredSize());
-
-					JButton left = addMotionSupport(character);
-					JLabel background = new JLabel();
-					background.setIcon(new ImageIcon("C:/Users/Patrick/Desktop/pics/smallbackground.jpg"));
-					background.setSize(background.getPreferredSize());
-					background.add(character);
-					frame.add(background);
-
-					//options for in-game menu
-					JMenuBar menu = new JMenuBar();
-					JMenu stuff = new JMenu("More");
-					JMenuItem song = new JMenuItem("Song");
-
-					menu.add(stuff);
-					//end options for in-game menu
-
-					frame.setJMenuBar(menu);
-					frame.pack();
-					frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-					frame.setVisible(true);	
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-		});*/
 	}
-
 	/**
 	 * Auxiliary method used to open webpages to specific 
 	 * pages.
@@ -212,6 +169,5 @@ public class Game extends KeyAdapter implements ActionListener{
 		else{
 			System.out.println(str);
 		}
-
 	}
 }
