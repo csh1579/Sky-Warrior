@@ -3,9 +3,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -20,18 +17,18 @@ public class Main implements ActionListener{
 	Clip clip;
 	Main() {
 		try{
-			clip = AudioSystem.getClip();
+			/*clip = AudioSystem.getClip();
 			File file = new File("C:/Users/Patrick/Downloads/SKYWARRIOR THEME FINAL less intro.wav");
 			AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
 			clip.open(inputStream);
-			clip.start();
+			clip.start();*/
 			
 			JFrame frame = new JFrame("SKY WARRIOR");
 			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 			
 			//set background
 			JLabel background = new JLabel();
-			background.setIcon(new ImageIcon("C:/Users/Patrick/Desktop/pics/menuBGR.png"));// I spelled desktop wrong originally..
+			background.setIcon(new ImageIcon("C:/Users/Cory/Desktop/pics/menuBGR.png"));// I spelled desktop wrong originally..
 			background.setSize(background.getPreferredSize());
 			JButton button = new JButton("Start Game");
 			button.setSize(100, 20);
@@ -87,10 +84,10 @@ public class Main implements ActionListener{
 		if (comStr.equals("Start Game")){
 			//
 			JLabel bird = new JLabel();
-			bird.setIcon(new ImageIcon("C:/Users/Patrick/Desktop/pics/bird.jpg"));
+			bird.setIcon(new ImageIcon("C:/Users/Cory/Desktop/pics/bird.jpg"));
 			try{
-				clip.close();
-				Game.main(null);
+			//	clip.close();
+				new Game();
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -112,7 +109,6 @@ public class Main implements ActionListener{
 			System.out.println(comStr + " Selected");
 		}
 	}
-
 	/**
 	 * Auxiliary method used to open webpages to specific 
 	 * pages.
@@ -128,7 +124,6 @@ public class Main implements ActionListener{
 			System.out.println(e.getMessage());
 		}
 	}
-
 	public static void main(String args[]) {
 		new Main();
 	}
