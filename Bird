@@ -1,0 +1,169 @@
+package moveable;
+
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class Bird extends KeyAdapter implements ActionListener{
+
+	public Component component, component2;
+	String picture = file name here;
+	private int BirdX = 0, BirdY = 0;
+	public int dx = 0, dy = 0;//x and y successfully hold bird's location
+	private double attack = 1.0, speed = 1.0;
+	public int health = 100;
+	boolean powerUpActive = false;
+	JLabel bird, bullet;
+
+	private int bulletX = 0, bulletY = 0, bulletDX = 0, bulletDY = -10;
+
+	public Bird(Component component, int deltaX, int deltaY){
+		this.component = component;
+		dx = deltaX; 
+		dy = deltaY;
+	}
+
+	public int getX(){
+		return BirdX;
+	}
+
+	public int getY(){
+		return BirdY;
+	}
+
+	public Bird(){
+		//EVERYTHING COMMENTED OUT IS FOR TESTING SOLELY THE BIRD CLASS
+		/*		JFrame frame = new JFrame();
+
+		JLabel label = new JLabel();
+		label.setIcon(new ImageIcon(file name here));
+		label.setSize(label.getPreferredSize());
+		addMotionSupport(label);
+
+		JLabel background = new JLabel();
+		background.setIcon(new ImageIcon(file name here));
+		background.setSize(background.getPreferredSize());
+		background.add(label);
+		frame.add(background);
+
+		frame.setSize(800, 600);
+		frame.setVisible(true);*/
+
+		//idea of bird class: sets up playable character for the player -
+		//DOES NOT add it to frame / background / etc - that'll be done through background
+		//class. only puts the pieces together.
+
+		bird = new JLabel();//makes the bird label
+		bird.setIcon(new ImageIcon(picture));//assigns image of bird to label
+		bird.setSize(bird.getPreferredSize());//size assessment
+		bird.setLocation(265, 274);
+		addMotionSupport(bird);//moveable bird
+	}
+
+	public void moveBird(int deltaX, int deltaY){
+		int componentWidth = component.getSize().width;
+		int componentHeight = component.getSize().height;
+
+		Dimension parentSize = component.getParent().getSize();
+		int parentWidth  = parentSize.width;
+		int parentHeight = parentSize.height;
+
+		//  Determine next X position
+
+		int nextX = Math.max(component.getLocation().x + deltaX, 0); //get location from top Left corner: 
+		if ( nextX + componentWidth > parentWidth){//if nextX (top left corner) + width of object > frame width
+			nextX = parentWidth - componentWidth;//dont let it pass border.
+		}
+
+		//  Determine next Y position
+
+		int nextY = Math.max(component.getLocation().y + deltaY, 0);
+		if ( nextY + componentHeight > 200){
+			nextY = parentHeight - componentHeight;
+		}
+
+		//  Move the component
+		component.setLocation(nextX, nextY);
+		//set x,y to location for bullet class.
+		BirdX = nextX; 
+		BirdY = nextY;
+
+		getHealth();
+		getAttack();
+		getSpeed();
+	}
+
+
+	@Override
+	public void keyPressed(KeyEvent e){
+		if (e.getKeyCode() == KeyEvent.VK_LEFT)
+			moveBird(-(dx+10), 0);
+		else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+			moveBird(dx+10, 0);
+		else if (e.getKeyCode() == KeyEvent.VK_UP)
+			moveBird(0, -(dy+10));
+		else if (e.getKeyCode() == KeyEvent.VK_DOWN)
+			moveBird(0, dy+10);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+
+		String action = arg0.getActionCommand();
+		return;
+	}
+
+	public static void main(String[] args){
+		new Bird();
+	}
+
+	private static JButton addMotionSupport(Component component){
+		KeyListener keyListener = new Bird(component, 3, 3);
+		component.addKeyListener(keyListener);
+		component.setFocusable(true);
+
+		return new JButton("BUTTON");
+	}
+	/** Auxiliary methods for speed, health, attack, etc */
+	public void setAttack(double newAtt){
+		attack = newAtt;
+	}
+
+	/** returns player's attack value
+	 */
+	public double getAttack(){
+		System.out.println("Att: " + attack);
+		return attack;
+	}
+
+	/** Sets the speed of player */
+	public void setSpeed(double newSpeed){
+		speed = newSpeed;
+	}
+
+	/** returns the player's speed */
+	public double getSpeed(){
+		System.out.println("Speed: "+ speed);
+		return speed;
+	}
+
+	/** sets the health of player */
+	public void setHealth(int hp){
+		health = hp;
+	}
+
+	/** returns the player's health */
+	public int getHealth(){
+		System.out.println("Health: "+health);
+		return health;
+	}
+}
