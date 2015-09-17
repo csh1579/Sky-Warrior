@@ -1,0 +1,95 @@
+
+package moveable;
+
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class Background extends KeyAdapter implements ActionListener{
+
+	Bird bird;
+	String bgd = file name here;
+	public int birdX=0, birdY=0;
+	Component component;
+	JLabel bullet;
+
+	Background(){
+		bird = new Bird();
+
+		JFrame frame = new JFrame();
+
+		JLabel background = new JLabel();
+		background.setIcon(new ImageIcon(bgd));
+		background.setPreferredSize(background.getPreferredSize());
+		background.add(bird.bird);
+		
+		bullet = new JLabel();
+		bullet.setIcon(new ImageIcon(file name here));
+		bullet.setSize(bullet.getPreferredSize());
+		bullet.setVisible(true);
+		addMotionSupport(bullet);
+		component = bullet;
+		background.add(bullet);
+		bullet.setLocation(bird.bird.getX()+24, bird.bird.getY()-10);
+		
+		frame.add(background);
+		frame.pack();
+		frame.setVisible(true);
+	}
+
+	public static void main(String[] args){
+		new Background();
+	}
+	
+	private static JButton addMotionSupport(Component component){
+		//TODO bullet class pls 
+		//KeyListener keyListener = new Bullet();
+		//component.addKeyListener(keyListener);
+		//component.setFocusable(true);
+
+		return new JButton("BUTTON");
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e){
+		if (e.getKeyCode() == KeyEvent.VK_SPACE){
+			bullet.setVisible(true);
+			move(0, -10);
+		}
+		else{
+			bird.keyPressed(e);
+		}
+	}
+	
+	public void move(int deltaX, int deltaY){
+
+		//  Determine next X position
+
+		int nextX = Math.max(component.getLocation().x + deltaX, 0); //get location from top Left corner: 
+
+		//  Determine next Y position
+
+		int nextY = Math.max(component.getLocation().y + deltaY, 0);
+
+		//  Move the component
+		
+		component.setLocation(component.getX()+deltaX, component.getY()+deltaY);
+		
+		//component.setLocation(nextX, nextY);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		String action = arg0.getActionCommand();
+		return;
+	}
+}
